@@ -4,51 +4,53 @@ using UnityEngine;
 
 public class SpawnApple : MonoBehaviour
 {
-    public GameObject snakeHead;
-    public GameObject apple;
-    public bool comeuMaca;
-    private GameObject newApple;
+    public Collider2D gridArea;
 
-    private GrowSnake growSnake;
-    void Awake()
+    private SnakeMove snake;
+
+    private void Awake()
     {
-        newApple = Instantiate(apple, new Vector3(1, 0, 0), Quaternion.identity);
+        snake = FindObjectOfType<SnakeMove>();
     }
-    void Update()
+
+    private void Start()
     {
-        comeuMaca = (snakeHead.transform.position == newApple.transform.position);
+        RandomizePosition();
+    }
 
-        growSnake = snakeHead.GetComponent<GrowSnake>();
-        bool appleSpawn = false;
+    public void RandomizePosition()
+    {
+        Bounds bounds = gridArea.bounds;
 
-        if (comeuMaca)
+        // Pick a random position inside the bounds
+        // Round the values to ensure it aligns with the grid
+        int x = Mathf.RoundToInt(Random.Range(bounds.min.x, bounds.max.x));
+        int y = Mathf.RoundToInt(Random.Range(bounds.min.y, bounds.max.y));
+
+        // Prevent the food from spawning on the snake
+        while (snake.Occupies(x, y))
         {
-            while (!appleSpawn)
+            x++;
+
+            if (x > bounds.max.x)
             {
-                Vector3 newApplePosition = new Vector3(Random.Range(-6, 6), Random.Range(-4, 4), 0);
-                if (spawnNewApple(newApplePosition))
+                x = Mathf.RoundToInt(bounds.min.x);
+                y++;
+
+                if (y > bounds.max.y)
                 {
-                    continue;
-                }
-                else
-                {
-                    Destroy(newApple);
-                    newApple = Instantiate(apple, newApplePosition, Quaternion.identity);
-                    appleSpawn = true;
+                    y = Mathf.RoundToInt(bounds.min.y);
                 }
             }
         }
+
+        transform.position = new Vector2(x, y);
     }
-    bool spawnNewApple(Vector3 newApplePosition)
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        for (int i = 0; i < growSnake.newSnakeTailClone.Count; i++)
-        {
-            if (newApplePosition == growSnake.newSnakeTailClone[i].transform.position)
-            {
-                return true;
-            }
-        }
-        return false;
+        RandomizePosition();
     }
 
 }
+

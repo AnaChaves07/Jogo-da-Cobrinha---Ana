@@ -7,7 +7,7 @@ public class Pontuação : MonoBehaviour
 {
     public TextMeshProUGUI pontuacao;
     public GameObject snakeHead;
-    private GrowSnake growSnake;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +17,7 @@ public class Pontuação : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        growSnake = snakeHead.GetComponent<GrowSnake>();
-        pontuacao.text = "Pontos: " + growSnake.newSnakeTailClone.Count;
+       
+      
     }
 }
