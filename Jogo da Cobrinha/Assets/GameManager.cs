@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] GameObject gameOverPanel;
     Vector2 screenBounds;
     float score;
 

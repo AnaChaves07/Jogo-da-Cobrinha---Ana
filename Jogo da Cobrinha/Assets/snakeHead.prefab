@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4612091447156301608}
   - component: {fileID: 8532773172162499190}
   - component: {fileID: -7763056729733280104}
+  - component: {fileID: -5387398305629304161}
   m_Layer: 0
   m_Name: snakeHead
   m_TagString: Player
@@ -102,8 +103,8 @@ MonoBehaviour:
   direction: {x: 1, y: 0}
   speed: 5
   speedMultiplier: 1
-  initialSize: 1
-  moveThroughWalls: 0
+  initialSize: 10
+  gameOverPanel: {fileID: 0}
 --- !u!61 &-7763056729733280104
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -149,3 +150,30 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &-5387398305629304161
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2435214410990009239}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7

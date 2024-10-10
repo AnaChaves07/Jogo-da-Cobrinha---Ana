@@ -7,6 +7,7 @@ TagManager:
   - Apple
   - snakeTail
   - snakeHead
+  - limite
   layers:
   - Default
   - TransparentFX

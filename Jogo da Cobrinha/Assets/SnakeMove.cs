@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SnakeMove : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class SnakeMove : MonoBehaviour
     private List<Transform> segments = new List<Transform>();
     private Vector2Int input;
     private float nextUpdate;
+    public GameObject gameOverPanel;
 
     private void Start()
     {
@@ -108,6 +110,11 @@ public class SnakeMove : MonoBehaviour
         {    
                 Teletransport(other.transform);
         }
+        else if (other.gameObject.CompareTag("snakeTail")) 
+        {
+            GameOver();
+            Debug.Log("Colidir");
+        }
     }
     private void Teletransport(Transform wall)
     {
@@ -132,5 +139,11 @@ public class SnakeMove : MonoBehaviour
 
         transform.position = position;
     }
-
+    void GameOver()
+    {
+       // SceneManager.LoadScene("GameOver");
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+   
 }
