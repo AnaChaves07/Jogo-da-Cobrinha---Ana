@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SnakeMove : MonoBehaviour
 {
@@ -14,6 +15,15 @@ public class SnakeMove : MonoBehaviour
     private Vector2Int input;
     private float nextUpdate;
     public GameObject gameOverPanel;
+    public GameObject initialPanel;
+
+    public Text appleCountText; 
+    public int appleCount = 0;
+
+    private void Awake()
+    {
+        Time.timeScale = 1f;
+    }
 
     private void Start()
     {
@@ -105,6 +115,8 @@ public class SnakeMove : MonoBehaviour
         if (other.gameObject.CompareTag("Apple"))
         {
             Grow();
+            appleCount++;
+            AppleCount();
         }
         else if (other.gameObject.CompareTag("limite"))
         {    
@@ -113,7 +125,7 @@ public class SnakeMove : MonoBehaviour
         else if (other.gameObject.CompareTag("snakeTail")) 
         {
             GameOver();
-            Debug.Log("Colidir");
+           
         }
     }
     private void Teletransport(Transform wall)
@@ -141,18 +153,36 @@ public class SnakeMove : MonoBehaviour
     }
     public void DefinirVelocidade(string value) 
     {
-        GameObject.Find("snakeHead").GetComponent<SnakeMove>().speed = float.Parse(value);
+        // GameObject.Find("snakeTail").GetComponent<SnakeMove>().speed = float.Parse(value);
+        if (float.TryParse(value, out float velocidade))
+        {
+            // Encontra a cobra e define a velocidade
+            GameObject snakeTail = GameObject.Find("snakeTail");
+            if (snakeTail != null)
+            {
+                snakeTail.GetComponent<SnakeMove>().speed = velocidade;
+            }
+        }
+
     }
     void GameOver()
     {
-       // SceneManager.LoadScene("GameOver");
+        SceneManager.LoadScene("Jogo");
         gameOverPanel.SetActive(true);
         Time.timeScale = 0;
     }
     public void ReniciarJogo()
     {
         gameOverPanel.SetActive(false);
-        SceneManager.LoadScene("Jogo");
         Time.timeScale = 1;
+    }
+    public void PlayButton()
+    {
+        initialPanel.SetActive(false);
+       
+    }
+    public void AppleCount()
+    {
+        appleCountText.text = "Pontos: " + appleCount;
     }
 }
