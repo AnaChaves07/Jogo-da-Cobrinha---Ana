@@ -8,11 +8,8 @@ public class SnakeMove : MonoBehaviour
     public Vector2Int direction;
     public float speed = 20f;
     public float speedMultiplier = 1f;
-    public int initialSize = 4;
-    public bool moveThroughWalls = false;
-
+    public int initialSize = 1;
     private List<Transform> segments = new List<Transform>();
-    //private readonly List<Transform> segments = new List<Transform>();
     private Vector2Int input;
     private float nextUpdate;
 
@@ -20,7 +17,6 @@ public class SnakeMove : MonoBehaviour
     {
         ResetState();
     }
-
     private void Update()
     {
        
@@ -50,27 +46,19 @@ public class SnakeMove : MonoBehaviour
         {
             return;
         }
-        // Set the new direction based on the input
+       
         if (input != Vector2Int.zero)
         {
             direction = input;
         }
-
-        // Set each segment's position to be the same as the one it follows. We
-        // must do this in reverse order so the position is set to the previous
-        // position, otherwise they will all be stacked on top of each other.
         for (int i = segments.Count - 1; i > 0; i--)
         {
             segments[i].position = segments[i - 1].position;
         }
-
-        // Move the snake in the direction it is facing
-        // Round the values to ensure it aligns to the grid
         int x = Mathf.RoundToInt(transform.position.x) + direction.x;
         int y = Mathf.RoundToInt(transform.position.y) + direction.y;
         transform.position = new Vector2(x, y);
 
-        // Set the next update time based on the speed
         nextUpdate = Time.time + (1f / (speed * speedMultiplier));
     }
 
@@ -85,18 +73,13 @@ public class SnakeMove : MonoBehaviour
     {
         direction = Vector2Int.right;
         transform.position = Vector3.zero;
-
-        // Start at 1 to skip destroying the head
         for (int i = 1; i < segments.Count; i++)
         {
             Destroy(segments[i].gameObject);
         }
-
-        // Clear the list but add back this as the head
         segments.Clear();
         segments.Add(transform);
 
-        // -1 since the head is already in the list
         for (int i = 0; i < initialSize - 1; i++)
         {
             Grow();
@@ -106,8 +89,7 @@ public class SnakeMove : MonoBehaviour
     {
         foreach (Transform segment in segments)
         {
-            if (Mathf.RoundToInt(segment.position.x) == x &&
-                Mathf.RoundToInt(segment.position.y) == y)
+            if (Mathf.RoundToInt(segment.position.x) == x && Mathf.RoundToInt(segment.position.y) == y)
             {
                 return true;
             }
@@ -123,28 +105,29 @@ public class SnakeMove : MonoBehaviour
             Grow();
         }
         else if (other.gameObject.CompareTag("limite"))
-        {
-            if (moveThroughWalls)
-            {
+        {    
                 Teletransport(other.transform);
-            }
-            else
-            {
-                ResetState();
-            }
         }
     }
     private void Teletransport(Transform wall)
     {
         Vector3 position = transform.position;
 
-        if (direction.x != 0f)
+        if (direction.x > 0) 
         {
-            position.x = Mathf.RoundToInt(-wall.position.x + direction.x);
+            position.x = -Camera.main.orthographicSize * Camera.main.aspect; 
         }
-        else if (direction.y != 0f)
+        else if (direction.x < 0) 
         {
-            position.y = Mathf.RoundToInt(-wall.position.y + direction.y);
+            position.x = Camera.main.orthographicSize * Camera.main.aspect; 
+        }
+        else if (direction.y > 0) 
+        {
+            position.y = -Camera.main.orthographicSize; 
+        }
+        else if (direction.y < 0)
+        { 
+            position.y = Camera.main.orthographicSize; 
         }
 
         transform.position = position;
