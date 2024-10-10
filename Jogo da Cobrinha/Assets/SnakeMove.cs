@@ -139,11 +139,20 @@ public class SnakeMove : MonoBehaviour
 
         transform.position = position;
     }
+    public void DefinirVelocidade(string value) 
+    {
+        GameObject.Find("snakeHead").GetComponent<SnakeMove>().speed = float.Parse(value);
+    }
     void GameOver()
     {
        // SceneManager.LoadScene("GameOver");
         gameOverPanel.SetActive(true);
         Time.timeScale = 0;
     }
-   
+    public void ReniciarJogo()
+    {
+        gameOverPanel.SetActive(false);
+        SceneManager.LoadScene("Jogo");
+        Time.timeScale = 1;
+    }
 }
