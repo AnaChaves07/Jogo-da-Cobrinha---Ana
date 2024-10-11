@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SnakeMove : MonoBehaviour
+public class SnakeMove : MonoBehaviour //Movimentação da cobrinha + métodos de game over e reniciar jogo
 {
     public Transform segmentPrefab;
     public Vector2Int direction;
@@ -18,7 +18,9 @@ public class SnakeMove : MonoBehaviour
     public GameObject initialPanel;
     public GameManager gameManager;
     private bool isGrowing = false;
-    private void Awake()
+
+
+    private void Awake() //Método para que tempo do jogo não seja pausado ao iniciar.
     {
         Time.timeScale = 1f;
     }
@@ -26,7 +28,7 @@ public class SnakeMove : MonoBehaviour
     {
         ResetState();
     }
-    private void Update()
+    private void Update() //Movimentação da cobrinha
     {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -45,7 +47,7 @@ public class SnakeMove : MonoBehaviour
                 direction = Vector2Int.left;
             }
     }
-    private void FixedUpdate()
+    private void FixedUpdate() //Método que move a cobra e atualiza a posição de cada segmento
     {
         if (Time.time < nextUpdate)
         {
@@ -53,7 +55,7 @@ public class SnakeMove : MonoBehaviour
         }
         if (isGrowing)
         {
-            isGrowing = false; // Reseta o flag após um ciclo
+            isGrowing = false; 
         }
         if (input != Vector2Int.zero)
         {
@@ -69,14 +71,14 @@ public class SnakeMove : MonoBehaviour
 
         nextUpdate = Time.time + (1f / (speed * speedMultiplier));
     }
-    public void Grow()
+    public void Grow() //Método para crescer a cobra 
     {
         Transform segment = Instantiate(segmentPrefab);
         segment.position = segments[segments.Count - 1].position;
         segments.Add(segment);
 
     }
-    public void ResetState()
+    public void ResetState() //Reseta a cobra para o estado inicial dps de reniciar o jogo
     {
         direction = Vector2Int.right;
         transform.position = Vector3.zero;
@@ -92,7 +94,7 @@ public class SnakeMove : MonoBehaviour
             Grow();
         }
     }
-    public bool Occupies(int x, int y)
+    public bool Occupies(int x, int y) //Verifica se a posição ocupada pelo segmento da cobra.
     {
         foreach (Transform segment in segments)
         {
@@ -103,7 +105,7 @@ public class SnakeMove : MonoBehaviour
         }
         return false;
     }
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other) //Método para checar as colisões 
     {
         if (other.gameObject.CompareTag("Apple"))
         {
@@ -119,11 +121,11 @@ public class SnakeMove : MonoBehaviour
         {
             if (!isGrowing && Occupies(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y)))
             {
-                GameOver(); // Somente aciona game over se a cabeça colidir com a cauda e não estiver crescendo
+                GameOver(); 
             }
         }
     }
-    private void Teletransport(Transform wall)
+    private void Teletransport(Transform wall) //Teletransporte da cobrinha
     {
         Vector3 position = transform.position;
 
@@ -145,18 +147,18 @@ public class SnakeMove : MonoBehaviour
         }
         transform.position = position;
     }
-    void GameOver()
+    void GameOver() //Método de game Over
     {
         gameOverPanel.SetActive(true);
         Time.timeScale = 0;
     }
-    public void ReniciarJogo()
+    public void ReniciarJogo() //Método para reniciar jogo
     {
         SceneManager.LoadScene("Jogo");
         gameOverPanel.SetActive(false);
         Time.timeScale = 1;  
     }
-    public void PlayButton()
+    public void PlayButton() //Botão de play 
     {
         initialPanel.SetActive(false);     
     }

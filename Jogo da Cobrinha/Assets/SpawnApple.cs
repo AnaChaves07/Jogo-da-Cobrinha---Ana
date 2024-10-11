@@ -2,21 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnApple : MonoBehaviour
+public class SpawnApple : MonoBehaviour //Spawna as maçãs 
 {
     public Collider2D gridArea;
     private SnakeMove snake;
 
-    private void Awake()
+    private void Awake() //Método para encontrar e armazenar a referência da cobra.
     {
         snake = FindObjectOfType<SnakeMove>();
     }
-
     private void Start()
     {
         RandomizePosition();
     }
-    public void RandomizePosition()
+    public void RandomizePosition() //Método para definir uma posição aleatória para a maçã dentro do gridArea
     {
         Bounds bounds = gridArea.bounds;
 
@@ -38,7 +37,7 @@ public class SpawnApple : MonoBehaviour
         }
         transform.position = new Vector2(x, y);
     }
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other) //Método para verificar uma colisão com a maçã
     {
         RandomizePosition();
     }
