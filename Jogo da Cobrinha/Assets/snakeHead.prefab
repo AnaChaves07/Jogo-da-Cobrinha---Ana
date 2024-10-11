@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -5387398305629304161}
   m_Layer: 0
   m_Name: snakeHead
-  m_TagString: Player
+  m_TagString: snakeHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,8 +103,11 @@ MonoBehaviour:
   direction: {x: 1, y: 0}
   speed: 5
   speedMultiplier: 1
-  initialSize: 10
+  initialSize: 1
   gameOverPanel: {fileID: 0}
+  initialPanel: {fileID: 0}
+  appleCountText: {fileID: 0}
+  appleCount: 0
 --- !u!61 &-7763056729733280104
 BoxCollider2D:
   m_ObjectHideFlags: 0

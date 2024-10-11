@@ -8,7 +8,7 @@ public class SnakeMove : MonoBehaviour
 {
     public Transform segmentPrefab;
     public Vector2Int direction;
-    public float speed = 20f;
+    public float speed; //= 20f;
     public float speedMultiplier = 1f;
     public int initialSize = 1;
     private List<Transform> segments = new List<Transform>();
@@ -31,7 +31,6 @@ public class SnakeMove : MonoBehaviour
     }
     private void Update()
     {
-       
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 direction = Vector2Int.up;
@@ -49,9 +48,7 @@ public class SnakeMove : MonoBehaviour
             {
                 direction = Vector2Int.left;
             }
-        
     }
-
     private void FixedUpdate()
     {
         if (Time.time < nextUpdate)
@@ -73,14 +70,12 @@ public class SnakeMove : MonoBehaviour
 
         nextUpdate = Time.time + (1f / (speed * speedMultiplier));
     }
-
     public void Grow()
     {
         Transform segment = Instantiate(segmentPrefab);
         segment.position = segments[segments.Count - 1].position;
         segments.Add(segment);
     }
-
     public void ResetState()
     {
         direction = Vector2Int.right;
@@ -109,14 +104,13 @@ public class SnakeMove : MonoBehaviour
 
         return false;
     }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Apple"))
         {
             Grow();
-            appleCount++;
-            AppleCount();
+          //  appleCount++;
+          
         }
         else if (other.gameObject.CompareTag("limite"))
         {    
@@ -151,38 +145,22 @@ public class SnakeMove : MonoBehaviour
 
         transform.position = position;
     }
-    public void DefinirVelocidade(string value) 
-    {
-        // GameObject.Find("snakeTail").GetComponent<SnakeMove>().speed = float.Parse(value);
-        if (float.TryParse(value, out float velocidade))
-        {
-            // Encontra a cobra e define a velocidade
-            GameObject snakeTail = GameObject.Find("snakeTail");
-            if (snakeTail != null)
-            {
-                snakeTail.GetComponent<SnakeMove>().speed = velocidade;
-            }
-        }
-
-    }
     void GameOver()
     {
-        SceneManager.LoadScene("Jogo");
+        //SceneManager.LoadScene("Jogo");
         gameOverPanel.SetActive(true);
         Time.timeScale = 0;
     }
     public void ReniciarJogo()
     {
+        SceneManager.LoadScene("Jogo");
         gameOverPanel.SetActive(false);
         Time.timeScale = 1;
+       
     }
     public void PlayButton()
     {
         initialPanel.SetActive(false);
        
-    }
-    public void AppleCount()
-    {
-        appleCountText.text = "Pontos: " + appleCount;
     }
 }

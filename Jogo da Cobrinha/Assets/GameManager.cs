@@ -1,25 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject gameOverPanel;
-    Vector2 screenBounds;
-    float score;
-
-    public static GameManager instance;
-
-    public Vector2 ScreenBounds { get => screenBounds; }
-
-    private void Awake()
+    private int diametroDoCampo;
+    public TextMeshProUGUI ScoreText;
+    private int score = 0;
+    public TextMeshProUGUI HighScoreText;
+    private int highScore = 0;
+    private void Start()
     {
-        instance = this;
-        screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height)) + new Vector3(-1, 1);
+        ScoreText.gameObject.SetActive(true);
+        UpdateScore(0);
+        HighScoreText.gameObject.SetActive(true);
     }
-
-    public void AddScore(int value)
+    public void UpdateScore(int points)
     {
-        score += value;
+        score += points;
+        ScoreText.text = "Score: " + score.ToString();
+        if (score > highScore)
+        {
+            highScore = score;
+            HighScoreText.text = "High Score: " + highScore.ToString();
+        }
+
+    }
+        public void DefinirDIametro(string value)
+    {
+        diametroDoCampo = int.Parse(value);
+    }
+    public void DefinirVelocidade(string value)
+    {
+        GameObject.Find("snakeHead").GetComponent<SnakeMove>().speed = float.Parse(value);
     }
 }
