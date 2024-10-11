@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpawnApple : MonoBehaviour
 {
     public Collider2D gridArea;
-
     private SnakeMove snake;
 
     private void Awake()
@@ -17,7 +16,6 @@ public class SpawnApple : MonoBehaviour
     {
         RandomizePosition();
     }
-
     public void RandomizePosition()
     {
         Bounds bounds = gridArea.bounds;
@@ -28,26 +26,21 @@ public class SpawnApple : MonoBehaviour
         while (snake.Occupies(x, y))
         {
             x++;
-
             if (x > bounds.max.x)
             {
                 x = Mathf.RoundToInt(bounds.min.x);
                 y++;
-
                 if (y > bounds.max.y)
                 {
                     y = Mathf.RoundToInt(bounds.min.y);
                 }
             }
         }
-
         transform.position = new Vector2(x, y);
     }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         RandomizePosition();
     }
-
 }
 

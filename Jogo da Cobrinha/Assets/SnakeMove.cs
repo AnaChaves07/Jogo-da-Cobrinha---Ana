@@ -8,7 +8,7 @@ public class SnakeMove : MonoBehaviour
 {
     public Transform segmentPrefab;
     public Vector2Int direction;
-    public float speed; //= 20f;
+    public float speed; 
     public float speedMultiplier = 1f;
     public int initialSize = 1;
     private List<Transform> segments = new List<Transform>();
@@ -16,15 +16,12 @@ public class SnakeMove : MonoBehaviour
     private float nextUpdate;
     public GameObject gameOverPanel;
     public GameObject initialPanel;
-
-    public Text appleCountText; 
-    public int appleCount = 0;
-
+    public GameManager gameManager;
+    private bool isGrowing = false;
     private void Awake()
     {
         Time.timeScale = 1f;
     }
-
     private void Start()
     {
         ResetState();
@@ -38,8 +35,7 @@ public class SnakeMove : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 direction = Vector2Int.down;
-            }
-        
+            }        
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 direction = Vector2Int.right;
@@ -55,7 +51,10 @@ public class SnakeMove : MonoBehaviour
         {
             return;
         }
-       
+        if (isGrowing)
+        {
+            isGrowing = false; // Reseta o flag após um ciclo
+        }
         if (input != Vector2Int.zero)
         {
             direction = input;
@@ -75,6 +74,7 @@ public class SnakeMove : MonoBehaviour
         Transform segment = Instantiate(segmentPrefab);
         segment.position = segments[segments.Count - 1].position;
         segments.Add(segment);
+
     }
     public void ResetState()
     {
@@ -101,7 +101,6 @@ public class SnakeMove : MonoBehaviour
                 return true;
             }
         }
-
         return false;
     }
     private void OnTriggerEnter2D(Collider2D other)
@@ -109,8 +108,8 @@ public class SnakeMove : MonoBehaviour
         if (other.gameObject.CompareTag("Apple"))
         {
             Grow();
-          //  appleCount++;
-          
+            gameManager.UpdateScore(1);
+            isGrowing = true;
         }
         else if (other.gameObject.CompareTag("limite"))
         {    
@@ -118,8 +117,10 @@ public class SnakeMove : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("snakeTail")) 
         {
-            GameOver();
-           
+            if (!isGrowing && Occupies(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y)))
+            {
+                GameOver(); // Somente aciona game over se a cabeça colidir com a cauda e não estiver crescendo
+            }
         }
     }
     private void Teletransport(Transform wall)
@@ -142,12 +143,10 @@ public class SnakeMove : MonoBehaviour
         { 
             position.y = Camera.main.orthographicSize; 
         }
-
         transform.position = position;
     }
     void GameOver()
     {
-        //SceneManager.LoadScene("Jogo");
         gameOverPanel.SetActive(true);
         Time.timeScale = 0;
     }
@@ -155,12 +154,11 @@ public class SnakeMove : MonoBehaviour
     {
         SceneManager.LoadScene("Jogo");
         gameOverPanel.SetActive(false);
-        Time.timeScale = 1;
-       
+        Time.timeScale = 1;  
     }
     public void PlayButton()
     {
-        initialPanel.SetActive(false);
-       
+        initialPanel.SetActive(false);     
     }
+
 }
