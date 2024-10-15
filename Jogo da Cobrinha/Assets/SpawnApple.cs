@@ -11,7 +11,7 @@ public class SpawnApple : MonoBehaviour //Spawna as maçãs
     {
         snake = FindObjectOfType<SnakeMove>();
     }
-    private void Start()
+    private void Start()//Método para iniciar o jogo instanciando a maçã
     {
         RandomizePosition();
     }
@@ -37,7 +37,7 @@ public class SpawnApple : MonoBehaviour //Spawna as maçãs
         }
         transform.position = new Vector2(x, y);
     }
-    private void OnTriggerEnter2D(Collider2D other) //Método para verificar uma colisão com a maçã
+    private void OnTriggerEnter2D(Collider2D other) //Método para definir uma posição aleatória pra maçã depois da colisão
     {
         RandomizePosition();
     }

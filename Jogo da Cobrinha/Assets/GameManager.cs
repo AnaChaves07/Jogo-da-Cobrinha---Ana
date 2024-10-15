@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour //Define a pontuação e guarda as inform
     private int highScore = 0;
     private GameManager instance;
     
-    #region 
+    #region //Padrão singleton
     private void Awake()//Método para instanciar o gameManager
     {
        instance = this;
