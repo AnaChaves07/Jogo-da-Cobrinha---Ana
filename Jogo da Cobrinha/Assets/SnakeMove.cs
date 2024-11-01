@@ -18,6 +18,9 @@ public class SnakeMove : MonoBehaviour //Movimentação da cobrinha + métodos de g
     public GameObject initialPanel;
     public GameManager gameManager;
     private bool isGrowing = false;
+    private bool isTeleporting = false;
+    private float teleportDuration = 0.1f; 
+    private float teleportEndTime = 0f; 
 
 
     private void Awake() //Método para que tempo do jogo não seja pausado ao iniciar.
@@ -30,7 +33,12 @@ public class SnakeMove : MonoBehaviour //Movimentação da cobrinha + métodos de g
     }
     private void Update() //Movimentação da cobrinha
     {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (isTeleporting && Time.time >= teleportEndTime)
+        {
+            isTeleporting = false; // Reseta a flag após o tempo
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 direction = Vector2Int.up;
             }
@@ -53,8 +61,10 @@ public class SnakeMove : MonoBehaviour //Movimentação da cobrinha + métodos de g
         {
             return;
         }
+
         if (isGrowing)
         {
+            Grow();
             isGrowing = false; 
         }
         if (input != Vector2Int.zero)
@@ -106,7 +116,13 @@ public class SnakeMove : MonoBehaviour //Movimentação da cobrinha + métodos de g
         return false;
     }
     private void OnTriggerEnter2D(Collider2D other) //Método para checar as colisões 
+
     {
+        if (isTeleporting)
+        {
+            return; // Ignora colisões enquanto está teleportando
+        }
+
         if (other.gameObject.CompareTag("Apple"))
         {
             Grow();
@@ -127,7 +143,9 @@ public class SnakeMove : MonoBehaviour //Movimentação da cobrinha + métodos de g
     }
     private void Teletransport(Transform wall) //Teletransporte da cobrinha
     {
+        isTeleporting = true;
         Vector3 position = transform.position;
+        teleportEndTime = Time.time + teleportDuration;
 
         if (direction.x > 0) 
         {
@@ -146,6 +164,12 @@ public class SnakeMove : MonoBehaviour //Movimentação da cobrinha + métodos de g
             position.y = Camera.main.orthographicSize; 
         }
         transform.position = position;
+       // Invoke("ResetTeleportingFlag", 0.1f);
+
+    }
+    private void ResetTeleportingFlag()
+    {
+        isTeleporting = false;
     }
     void GameOver() //Método de game Over
     {
